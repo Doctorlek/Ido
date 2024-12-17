@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Words in Large Font</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #1a10cb, #2574fc);
+            color: white;
+        }
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        #word-display {
+            font-size: 60px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+            background-color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+        #word-display:hover {
+            transform: scale(1.1);
+        }
+        #next-button {
+            font-size: 18px;
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #next-button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        #next-button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="word-display">התחל</div>
+        <button id="next-button" onclick="showNextWord()">המשך</button>
+    </div>
+
+    <script>
+        let words = [];
+        let currentIndex = 0;
+
+        // קריאה ל-API כדי לקבל את המילים
+        fetch('https://api.npoint.io/6f3e446b8136a9080e7e')
+            .then(response => response.json())
+            .then(data => {
+                words = data; // שמירת המילים שהתקבלו מה-API
+                document.getElementById('word-display').innerText = words[currentIndex]; // הצגת המילה הראשונה
+            })
+            .catch(error => {
+                console.error('Error fetching words:', error);
+            });
+
+        function showNextWord() {
+            if (currentIndex < words.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0; // Restart from the beginning
+            }
+            document.getElementById('word-display').innerText = words[currentIndex];
+        }
+    </script>
+
+</body>
+</html>
