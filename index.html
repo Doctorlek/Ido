@@ -67,12 +67,11 @@
         let words = [];
         let currentIndex = 0;
 
-        // קריאה ל-API כדי לקבל את המילים
         fetch('https://api.npoint.io/6f3e446b8136a9080e7e')
             .then(response => response.json())
             .then(data => {
-                words = data; // שמירת המילים שהתקבלו מה-API
-                document.getElementById('word-display').innerText = words[currentIndex]; // הצגת המילה הראשונה
+                words = data; 
+                document.getElementById('word-display').innerText = words[currentIndex]; 
             })
             .catch(error => {
                 console.error('Error fetching words:', error);
