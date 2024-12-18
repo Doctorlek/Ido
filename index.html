@@ -37,7 +37,7 @@
         #word-display:hover {
             transform: scale(1.1);
         }
-        #next-button {
+        #next-button, #speak-button {
             font-size: 18px;
             padding: 12px 25px;
             background-color: #4CAF50;
@@ -46,12 +46,13 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
+            margin: 5px;
         }
-        #next-button:hover {
+        #next-button:hover, #speak-button:hover {
             background-color: #45a049;
             transform: translateY(-2px);
         }
-        #next-button:active {
+        #next-button:active, #speak-button:active {
             transform: translateY(1px);
         }
     </style>
@@ -61,6 +62,7 @@
     <div class="container">
         <div id="word-display">התחל</div>
         <button id="next-button" onclick="showNextWord()">המשך</button>
+        <button id="speak-button" onclick="speakWord()">הקראה</button>
     </div>
 
     <script>
@@ -84,6 +86,12 @@
                 currentIndex = 0; // Restart from the beginning
             }
             document.getElementById('word-display').innerText = words[currentIndex];
+        }
+
+        function speakWord() {
+            const text = words[currentIndex];
+            const audio = new Audio(`https://ar-tts.ashlynn.workers.dev/?text=${encodeURIComponent(text)}`);
+            audio.play();
         }
     </script>
 
