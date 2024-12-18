@@ -59,41 +59,52 @@
 </head>
 <body>
 
-    <div class="container">
-        <div id="word-display">התחל</div>
-        <button id="next-button" onclick="showNextWord()">המשך</button>
-        <button id="speak-button" onclick="speakWord()">הקראה</button>
-    </div>
+<div class="container">
+    <div id="word-display">התחל</div>
+    <button id="next-button" onclick="showNextWord()">המשך</button>
+    <button id="speak-button" onclick="speakWord()">הקראה</button>
+</div>
 
-    <script>
-        let words = [];
-        let currentIndex = 0;
+<script>
+    let words = [];
+    let currentIndex = 0;
+    let attempts = 0;
 
-        fetch('https://api.npoint.io/6f3e446b8136a9080e7e')
-            .then(response => response.json())
-            .then(data => {
-                words = data; 
-                document.getElementById('word-display').innerText = words[currentIndex]; 
-            })
-            .catch(error => {
-                console.error('Error fetching words:', error);
-            });
-
-        function showNextWord() {
-            if (currentIndex < words.length - 1) {
-                currentIndex++;
-            } else {
-                currentIndex = 0; // Restart from the beginning
-            }
+    fetch('https://api.npoint.io/6f3e446b8136a9080e7e')
+        .then(response => response.json())
+        .then(data => {
+            words = data;
             document.getElementById('word-display').innerText = words[currentIndex];
-        }
+        })
+        .catch(error => {
+            console.error('Error fetching words:', error);
+        });
 
-        function speakWord() {
-            const text = words[currentIndex];
-            const audio = new Audio(`https://ar-tts.ashlynn.workers.dev/?text=${encodeURIComponent(text)}`);
-            audio.play();
+    function showNextWord() {
+        if (currentIndex < words.length - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0;
         }
-    </script>
+        document.getElementById('word-display').innerText = words[currentIndex];
+    }
+
+    function speakWord() {
+        const wordToSpeak = words[currentIndex];
+        attempts++;
+
+        if (wordToSpeak.toLowerCase() === 'research' && attempts >= 3) {
+            const audioURL = `https://ar-tts.ashlynn.workers.dev/?text=${encodeURIComponent(wordToSpeak)}`;
+            const audio = new Audio(audioURL);
+            audio.play().catch(err => console.error(err));
+            attempts = 0;
+        } else {
+            const audioURL = `https://ar-tts.ashlynn.workers.dev/?text=${encodeURIComponent(wordToSpeak)}`;
+            const audio = new Audio(audioURL);
+            audio.play().catch(err => console.error(err));
+        }
+    }
+</script>
 
 </body>
 </html>
